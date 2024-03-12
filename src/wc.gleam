@@ -1,6 +1,7 @@
 import gleam/io
 
-pub type Files {
+pub type Input {
+  Stdin
   Files(
     first: String,
     rest: List(String)
@@ -9,7 +10,7 @@ pub type Files {
 
 pub type Command {
   Command(
-    files: Files,
+    input: Input
   )
 }
 
