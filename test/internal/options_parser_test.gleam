@@ -31,6 +31,7 @@ pub fn parse_invalid_option_with_valid_option() {
 }
 
 pub fn parse_two_combined_options() {
-  1
-  |> should.equal(1)
+  "-cl"
+  |> op.parse
+  |> should.equal(Ok([op.Bytes, op.Lines]))
 }
