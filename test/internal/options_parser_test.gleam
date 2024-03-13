@@ -15,17 +15,20 @@ pub fn parse_single_option_test() {
 pub fn parse_two_separate_options_test() {
   "-c -l"
   |> op.parse
-  |> should.equal(
-    Ok([op.Bytes, op.Lines])
-  )
+  |> should.equal(Ok([op.Bytes, op.Lines]))
 }
 
-pub fn parse_two_combined_options() {
+pub fn parse_invalid_option() {
   1
   |> should.equal(1)
 }
 
-pub fn parse_invalid_option() {
+pub fn parse_invalid_option_with_valid_option() {
+  1
+  |> should.equal(1)
+}
+
+pub fn parse_two_combined_options() {
   1
   |> should.equal(1)
 }
