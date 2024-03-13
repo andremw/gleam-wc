@@ -9,12 +9,15 @@ pub fn main() {
 pub fn parse_single_option_test() {
   "-c"
   |> op.parse
-  |> should.equal(Ok(op.Bytes))
+  |> should.equal(Ok([op.Bytes]))
 }
 
 pub fn parse_two_separate_options_test() {
-  1
-  |> should.equal(1)
+  "-c -l"
+  |> op.parse
+  |> should.equal(
+    Ok([op.Bytes, op.Lines])
+  )
 }
 
 pub fn parse_two_combined_options() {
