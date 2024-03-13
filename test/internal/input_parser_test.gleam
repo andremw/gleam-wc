@@ -1,8 +1,17 @@
 import gleeunit
 import gleeunit/should
+import internal/input_parser.{Command, Stdin}
 
 pub fn main() {
   gleeunit.main()
+}
+
+pub fn parse_input_stdin_test() {
+  ["c"]
+  |> input_parser.parse
+  |> should.equal(Ok(Command(
+    input: Stdin
+  )))
 }
 
 pub fn parse_input_single_file_test() {
@@ -11,11 +20,6 @@ pub fn parse_input_single_file_test() {
 }
 
 pub fn parse_input_multiple_files_test() {
-  1
-  |> should.equal(1)
-}
-
-pub fn parse_input_stdin_test() {
   1
   |> should.equal(1)
 }
