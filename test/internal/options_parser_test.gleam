@@ -19,13 +19,15 @@ pub fn parse_two_separate_options_test() {
 }
 
 pub fn parse_invalid_option() {
-  1
-  |> should.equal(1)
+  "-x"
+  |> op.parse
+  |> should.equal(Error("Invalid option: -x. \nUsage: wc [-clmw] [file ...]"))
 }
 
 pub fn parse_invalid_option_with_valid_option() {
-  1
-  |> should.equal(1)
+  "-c -x -l"
+  |> op.parse
+  |> should.equal(Error("Invalid option: -x. \nUsage: wc [-clmw] [file ...]"))
 }
 
 pub fn parse_two_combined_options() {
