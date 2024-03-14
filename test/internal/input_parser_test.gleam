@@ -1,14 +1,16 @@
 import gleeunit
 import gleeunit/should
 import internal/input_parser.{Command, Stdin}
+import internal/options_parser.{Bytes}
 
 pub fn main() {
   gleeunit.main()
 }
 
 pub fn parse_c_bytes_test() {
-  1
-  |> should.equal(1)
+  ["-c"]
+  |> input_parser.parse
+  |> should.equal(Ok(Command(input: Stdin, options: [Bytes])))
 }
 
 pub fn parse_l_lines_test() {
@@ -37,11 +39,9 @@ pub fn parse_c_cancels_m_test() {
 }
 
 pub fn parse_input_stdin_test() {
-  ["c"]
+  ["-c"]
   |> input_parser.parse
-  |> should.equal(Ok(Command(
-    input: Stdin
-  )))
+  |> should.equal(Ok(Command(input: Stdin, options: [Bytes])))
 }
 
 pub fn parse_input_single_file_test() {
