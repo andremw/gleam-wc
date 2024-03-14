@@ -16,8 +16,11 @@ pub fn parse(input: String) -> Result(List(tp.Option), String) {
       "w" -> Ok(tp.Words)
       "m" -> Ok(tp.Chars)
       _ ->
-        Error("Invalid option " <> option <> ". \nUsage: wc [-clmw] [file ...]")
+        Error(
+          "Invalid option -- " <> option <> ". \nUsage: wc [-clmw] [file ...]",
+        )
     }
   })
+  |> list.unique
   |> result.all
 }

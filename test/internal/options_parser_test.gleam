@@ -19,20 +19,20 @@ pub fn parse_two_separate_options_test() {
   |> should.equal(Ok([Bytes, Lines]))
 }
 
-pub fn parse_invalid_option() {
+pub fn parse_invalid_option_test() {
   "-x"
   |> parse
-  |> should.equal(Error("Invalid option: -x. \nUsage: wc [-clmw] [file ...]"))
+  |> should.equal(Error("Invalid option -- x. \nUsage: wc [-clmw] [file ...]"))
 }
 
-pub fn parse_invalid_option_with_valid_option() {
+pub fn parse_invalid_option_with_valid_option_test() {
   "-c -x -l"
   |> parse
-  |> should.equal(Error("Invalid option: -x. \nUsage: wc [-clmw] [file ...]"))
+  |> should.equal(Error("Invalid option -- x. \nUsage: wc [-clmw] [file ...]"))
 }
 
-pub fn parse_two_combined_options() {
-  "-cl"
+pub fn parse_duplicated_options_test() {
+  "-c -c -l"
   |> parse
   |> should.equal(Ok([Bytes, Lines]))
 }
