@@ -36,3 +36,9 @@ pub fn parse_duplicated_options_test() {
   |> parse
   |> should.equal(Ok([Bytes, Lines]))
 }
+
+pub fn parse_two_combined_options_test() {
+  "-cl"
+  |> parse
+  |> should.equal(Ok([Bytes, Lines]))
+}
