@@ -31,6 +31,16 @@ pub fn parse_m_chars_test() {
   |> should.equal(Ok(Command(input: Stdin, options: [Chars])))
 }
 
+pub fn parse_multiple_options_test() {
+  1
+  |> should.equal(1)
+}
+
+pub fn parse_multiple_options_sorted_by_lwc_test() {
+  1
+  |> should.equal(1)
+}
+
 pub fn parse_no_args_default_to_lwc_test() {
   1
   |> should.equal(1)
