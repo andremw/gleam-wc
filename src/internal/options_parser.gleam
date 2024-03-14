@@ -6,6 +6,8 @@ import gleam/result
 pub type Option {
   Bytes
   Lines
+  Words
+  Chars
 }
 
 pub fn parse(input: String) -> Result(List(Option), String) {
@@ -17,6 +19,8 @@ pub fn parse(input: String) -> Result(List(Option), String) {
     case option {
       "c" -> Ok(Bytes)
       "l" -> Ok(Lines)
+      "w" -> Ok(Words)
+      "m" -> Ok(Chars)
       _ ->
         Error("Invalid option " <> option <> ". \nUsage: wc [-clmw] [file ...]")
     }
