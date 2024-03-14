@@ -37,6 +37,12 @@ pub fn parse_input_stdin_test() {
   |> should.equal(Ok(Command(input: Stdin, options: [Bytes])))
 }
 
+pub fn parse_no_args_default_to_lwc_test() {
+  []
+  |> parse
+  |> should.equal(Ok(Command(input: Stdin, options: [Lines, Words, Bytes])))
+}
+
 pub fn parse_input_single_file_test() {
   1
   |> should.equal(1)
@@ -48,11 +54,6 @@ pub fn parse_multiple_options_test() {
 }
 
 pub fn parse_multiple_options_sorted_by_lwc_test() {
-  1
-  |> should.equal(1)
-}
-
-pub fn parse_no_args_default_to_lwc_test() {
   1
   |> should.equal(1)
 }
