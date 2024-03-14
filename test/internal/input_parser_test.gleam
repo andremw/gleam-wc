@@ -58,13 +58,15 @@ pub fn parse_input_single_file_test() {
 }
 
 pub fn parse_multiple_options_test() {
-  1
-  |> should.equal(1)
+  ["-l", "-w", "-c"]
+  |> parse
+  |> should.equal(Ok(Command(input: Stdin, options: [Lines, Words, Bytes])))
 }
 
 pub fn parse_multiple_options_sorted_by_lwc_test() {
-  1
-  |> should.equal(1)
+  ["-w", "-c", "-l"]
+  |> parse
+  |> should.equal(Ok(Command(input: Stdin, options: [Lines, Words, Bytes])))
 }
 
 pub fn parse_m_cancels_c_test() {
