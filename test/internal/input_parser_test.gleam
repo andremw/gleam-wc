@@ -70,13 +70,15 @@ pub fn parse_multiple_options_sorted_by_lwc_test() {
 }
 
 pub fn parse_m_cancels_c_test() {
-  1
-  |> should.equal(1)
+  ["-m", "-c"]
+  |> parse
+  |> should.equal(Ok(Command(input: Stdin, options: [Chars])))
 }
 
 pub fn parse_c_cancels_m_test() {
-  1
-  |> should.equal(1)
+  ["-c", "-m"]
+  |> parse
+  |> should.equal(Ok(Command(input: Stdin, options: [Bytes])))
 }
 
 pub fn parse_input_multiple_files_test() {
