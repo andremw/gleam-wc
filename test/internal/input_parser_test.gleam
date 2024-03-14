@@ -31,6 +31,17 @@ pub fn parse_m_chars_test() {
   |> should.equal(Ok(Command(input: Stdin, options: [Chars])))
 }
 
+pub fn parse_input_stdin_test() {
+  ["-c"]
+  |> parse
+  |> should.equal(Ok(Command(input: Stdin, options: [Bytes])))
+}
+
+pub fn parse_input_single_file_test() {
+  1
+  |> should.equal(1)
+}
+
 pub fn parse_multiple_options_test() {
   1
   |> should.equal(1)
@@ -52,17 +63,6 @@ pub fn parse_m_cancels_c_test() {
 }
 
 pub fn parse_c_cancels_m_test() {
-  1
-  |> should.equal(1)
-}
-
-pub fn parse_input_stdin_test() {
-  ["-c"]
-  |> parse
-  |> should.equal(Ok(Command(input: Stdin, options: [Bytes])))
-}
-
-pub fn parse_input_single_file_test() {
   1
   |> should.equal(1)
 }
