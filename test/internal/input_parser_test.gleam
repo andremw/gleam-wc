@@ -1,6 +1,6 @@
 import gleeunit
 import gleeunit/should
-import internal/types.{Bytes, Chars, Command, Lines, Stdin, Words}
+import internal/types.{Bytes, Chars, Command, Files, Lines, Stdin, Words}
 import internal/input_parser.{parse}
 
 pub fn main() {
@@ -44,8 +44,17 @@ pub fn parse_no_args_default_to_lwc_test() {
 }
 
 pub fn parse_input_single_file_test() {
-  1
-  |> should.equal(1)
+  ["file.txt"]
+  |> parse
+  |> should.equal(
+    Ok(
+      Command(input: Files(first: "file.txt", rest: []), options: [
+        Lines,
+        Words,
+        Bytes,
+      ]),
+    ),
+  )
 }
 
 pub fn parse_multiple_options_test() {
