@@ -1,7 +1,7 @@
 import gleeunit
 import gleeunit/should
-import internal/input_parser.{Command, Stdin}
-import internal/options_parser.{Bytes, Chars, Lines, Words}
+import internal/types.{Bytes, Chars, Command, Lines, Stdin, Words}
+import internal/input_parser.{parse}
 
 pub fn main() {
   gleeunit.main()
@@ -9,25 +9,25 @@ pub fn main() {
 
 pub fn parse_c_bytes_test() {
   ["-c"]
-  |> input_parser.parse
+  |> parse
   |> should.equal(Ok(Command(input: Stdin, options: [Bytes])))
 }
 
 pub fn parse_l_lines_test() {
   ["-l"]
-  |> input_parser.parse
+  |> parse
   |> should.equal(Ok(Command(input: Stdin, options: [Lines])))
 }
 
 pub fn parse_w_words_test() {
   ["-w"]
-  |> input_parser.parse
+  |> parse
   |> should.equal(Ok(Command(input: Stdin, options: [Words])))
 }
 
 pub fn parse_m_chars_test() {
   ["-m"]
-  |> input_parser.parse
+  |> parse
   |> should.equal(Ok(Command(input: Stdin, options: [Chars])))
 }
 
@@ -43,7 +43,7 @@ pub fn parse_c_cancels_m_test() {
 
 pub fn parse_input_stdin_test() {
   ["-c"]
-  |> input_parser.parse
+  |> parse
   |> should.equal(Ok(Command(input: Stdin, options: [Bytes])))
 }
 
