@@ -82,6 +82,15 @@ pub fn parse_c_cancels_m_test() {
 }
 
 pub fn parse_input_multiple_files_test() {
-  1
-  |> should.equal(1)
+  ["file1.txt", "file2.txt"]
+  |> parse
+  |> should.equal(
+    Ok(
+      Command(input: Files(first: "file1.txt", rest: ["file2.txt"]), options: [
+        Lines,
+        Words,
+        Bytes,
+      ]),
+    ),
+  )
 }
