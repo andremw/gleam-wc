@@ -13,3 +13,12 @@ pub type Option {
 pub type Command {
   Command(input: Input, options: List(Option))
 }
+
+pub type OutputValue {
+  OBytes(Int)
+  // can't name Bytes because of conflict with Option
+}
+
+pub type Output {
+  Output(values: List(OutputValue))
+}
