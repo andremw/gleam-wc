@@ -5,7 +5,7 @@ import internal/input_parser
 import internal/types as tp
 import simplifile.{read_bits}
 
-pub fn run(raw_input: List(String)) -> Result(tp.Output, String) {
+pub fn wc(raw_input: List(String)) -> Result(tp.Output, String) {
   use command <- result.try(
     raw_input
     |> input_parser.parse,

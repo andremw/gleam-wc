@@ -1,6 +1,6 @@
 import gleeunit
 import gleeunit/should
-import wc.{run as wc}
+import wc.{wc}
 import internal/types.{OBytes, Output}
 
 pub fn main() {
