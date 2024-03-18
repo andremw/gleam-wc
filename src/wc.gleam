@@ -24,9 +24,17 @@ pub fn wc(raw_input: List(String)) -> Result(tp.Output, String) {
     tp.Files(first, rest) -> {
       [first, ..rest]
       |> list.try_map(fn(file) {
-        file
-        |> read_bytes
+        command.options
+        |> list.try_map(fn(option) {
+          case option {
+            tp.Bytes ->
+              file
+              |> read_bytes
+            _ -> Ok(tp.OBytes(1))
+          }
+        })
       })
+      |> result.map(list.flatten)
       |> result.map(fn(values) { tp.Output(values: values) })
     }
   }
