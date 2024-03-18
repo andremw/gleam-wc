@@ -18,6 +18,7 @@ pub type OutputValue {
   // can't name Bytes or Lines because of conflict with Option
   OBytes(Int)
   OLines(Int)
+  OWords(Int)
 }
 
 pub type Output {
