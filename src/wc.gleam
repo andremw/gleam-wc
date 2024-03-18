@@ -10,8 +10,6 @@ fn read_bytes(file: String) {
   file
   |> read_bits
   |> result.map(bit_array.byte_size)
-  |> result.map(tp.OBytes)
-  |> result.map_error(fn(_e) { "Error reading file" })
 }
 
 fn read_lines(file: String) {
@@ -21,9 +19,7 @@ fn read_lines(file: String) {
     content
     |> string.split("\n")
     |> list.length
-    |> tp.OLines
   })
-  |> result.map_error(fn(_e) { "Error reading file" })
 }
 
 pub fn wc(raw_input: List(String)) -> Result(tp.Output, String) {
@@ -43,9 +39,13 @@ pub fn wc(raw_input: List(String)) -> Result(tp.Output, String) {
             tp.Bytes ->
               file
               |> read_bytes
+              |> result.map(tp.OBytes)
+              |> result.map_error(fn(_e) { "Error reading file" })
             tp.Lines ->
               file
               |> read_lines
+              |> result.map(tp.OLines)
+              |> result.map_error(fn(_e) { "Error reading file" })
             _ -> Ok(tp.OBytes(1))
           }
         })
