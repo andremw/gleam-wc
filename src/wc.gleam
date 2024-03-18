@@ -18,11 +18,8 @@ pub fn wc(raw_input: List(String)) -> Result(tp.Output, String) {
       |> list.try_map(fn(file) {
         file
         |> read_bits
-        |> result.map(fn(bits) {
-          bits
-          |> bit_array.byte_size
-          |> tp.OBytes
-        })
+        |> result.map(bit_array.byte_size)
+        |> result.map(tp.OBytes)
         |> result.map_error(fn(_e) { "Error reading file" })
       })
       |> result.map(fn(values) { tp.Output(values: values) })
