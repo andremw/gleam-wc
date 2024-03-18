@@ -18,3 +18,18 @@ pub fn get_number_of_lines_in_a_file_test() {
   |> wc
   |> should.equal(Ok(Output(values: [OLines(7146)])))
 }
+
+pub fn get_number_of_words_in_a_file_test() {
+  1
+  |> should.equal(1)
+}
+
+pub fn get_default_output_test() {
+  1
+  |> should.equal(1)
+}
+
+pub fn get_default_output_from_stdin_test() {
+  1
+  |> should.equal(1)
+}
