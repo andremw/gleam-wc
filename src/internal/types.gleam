@@ -15,8 +15,9 @@ pub type Command {
 }
 
 pub type OutputValue {
+  // can't name Bytes or Lines because of conflict with Option
   OBytes(Int)
-  // can't name Bytes because of conflict with Option
+  OLines(Int)
 }
 
 pub type Output {

@@ -1,15 +1,28 @@
 import gleam/result
 import gleam/list
 import gleam/bit_array
+import gleam/string
 import internal/input_parser
 import internal/types as tp
-import simplifile.{read_bits}
+import simplifile.{read, read_bits}
 
 fn read_bytes(file: String) {
   file
   |> read_bits
   |> result.map(bit_array.byte_size)
   |> result.map(tp.OBytes)
+  |> result.map_error(fn(_e) { "Error reading file" })
+}
+
+fn read_lines(file: String) {
+  file
+  |> read
+  |> result.map(fn(content) {
+    content
+    |> string.split("\n")
+    |> list.length
+    |> tp.OLines
+  })
   |> result.map_error(fn(_e) { "Error reading file" })
 }
 
@@ -30,6 +43,9 @@ pub fn wc(raw_input: List(String)) -> Result(tp.Output, String) {
             tp.Bytes ->
               file
               |> read_bytes
+            tp.Lines ->
+              file
+              |> read_lines
             _ -> Ok(tp.OBytes(1))
           }
         })
