@@ -1,45 +1,34 @@
 import gleam/result
 import gleam/list
-import gleam/bit_array
 import gleam/string
 import gleam/regex
 import internal/input_parser
 import internal/types as tp
-import simplifile.{read, read_bits}
+import simplifile.{read}
 
-fn read_bytes(file: String) {
-  file
-  |> read_bits
-  |> result.map(bit_array.byte_size)
+fn read_bytes(content: String) -> Int {
+  content
+  |> string.byte_size
 }
 
-fn read_lines(file: String) {
-  file
-  |> read
-  |> result.map(fn(content) {
-    content
-    |> string.split("\n")
-    |> list.length
-  })
+fn read_lines(content: String) {
+  content
+  |> string.split("\n")
+  |> list.length
 }
 
-fn read_words(file: String) {
-  file
-  |> read
-  |> result.map(fn(content) {
-    let assert Ok(re) = regex.from_string("\\s+")
-    content
-    |> string.trim
-    |> regex.split(with: re)
-    |> list.length
-  })
+fn read_words(content: String) {
+  let assert Ok(re) = regex.from_string("\\s+")
+  content
+  |> string.trim
+  |> regex.split(with: re)
+  |> list.length
 }
 
-fn count_characters(file: String) {
-  file
-  |> read
-  |> result.map(string.to_utf_codepoints)
-  |> result.map(list.length)
+fn count_characters(content: String) {
+  content
+  |> string.to_utf_codepoints
+  |> list.length
 }
 
 pub fn wc(raw_input: List(String)) -> Result(tp.Output, String) {
@@ -55,28 +44,30 @@ pub fn wc(raw_input: List(String)) -> Result(tp.Output, String) {
       |> list.try_map(fn(file) {
         command.options
         |> list.try_map(fn(option) {
-          case option {
+          use content <- result.try(
+            file
+            |> read
+            |> result.map_error(fn(_e) { "Error reading file" }),
+          )
+
+          Ok(case option {
             tp.Bytes ->
-              file
+              content
               |> read_bytes
-              |> result.map(tp.OBytes)
-              |> result.map_error(fn(_e) { "Error reading file" })
+              |> tp.OBytes
             tp.Lines ->
-              file
+              content
               |> read_lines
-              |> result.map(tp.OLines)
-              |> result.map_error(fn(_e) { "Error reading file" })
+              |> tp.OLines
             tp.Words ->
-              file
+              content
               |> read_words
-              |> result.map(tp.OWords)
-              |> result.map_error(fn(_e) { "Error reading file" })
+              |> tp.OWords
             tp.Chars ->
-              file
+              content
               |> count_characters
-              |> result.map(tp.OChars)
-              |> result.map_error(fn(_e) { "Error reading file" })
-          }
+              |> tp.OChars
+          })
         })
       })
       |> result.map(list.flatten)
