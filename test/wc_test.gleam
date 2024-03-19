@@ -32,8 +32,11 @@ pub fn get_number_of_characters_in_a_file_test() {
 }
 
 pub fn get_default_output_test() {
-  1
-  |> should.equal(1)
+  ["test.txt"]
+  |> wc
+  |> should.equal(
+    Ok(Output(values: [OLines(7146), OWords(58_164), OBytes(342_190)])),
+  )
 }
 
 pub fn get_default_output_from_stdin_test() {
