@@ -6,7 +6,7 @@ import internal/input_parser
 import internal/types as tp
 import simplifile.{read}
 
-fn read_bytes(content: String) -> Int {
+fn read_bytes(content: String) {
   content
   |> string.byte_size
 }
