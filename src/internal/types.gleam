@@ -19,6 +19,7 @@ pub type OutputValue {
   OBytes(Int)
   OLines(Int)
   OWords(Int)
+  OChars(Int)
 }
 
 pub type Output {

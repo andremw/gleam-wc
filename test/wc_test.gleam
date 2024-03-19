@@ -1,7 +1,7 @@
 import gleeunit
 import gleeunit/should
 import wc.{wc}
-import internal/types.{OBytes, OLines, OWords, Output}
+import internal/types.{OBytes, OChars, OLines, OWords, Output}
 
 pub fn main() {
   gleeunit.main()
@@ -26,8 +26,9 @@ pub fn get_number_of_words_in_a_file_test() {
 }
 
 pub fn get_number_of_characters_in_a_file_test() {
-  1
-  |> should.equal(1)
+  ["-m", "test.txt"]
+  |> wc
+  |> should.equal(Ok(Output(values: [OChars(339_292)])))
 }
 
 pub fn get_default_output_test() {

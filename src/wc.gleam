@@ -35,6 +35,13 @@ fn read_words(file: String) {
   })
 }
 
+fn count_characters(file: String) {
+  file
+  |> read
+  |> result.map(string.to_utf_codepoints)
+  |> result.map(list.length)
+}
+
 pub fn wc(raw_input: List(String)) -> Result(tp.Output, String) {
   use command <- result.try(
     raw_input
@@ -64,7 +71,11 @@ pub fn wc(raw_input: List(String)) -> Result(tp.Output, String) {
               |> read_words
               |> result.map(tp.OWords)
               |> result.map_error(fn(_e) { "Error reading file" })
-            _ -> Ok(tp.OBytes(1))
+            tp.Chars ->
+              file
+              |> count_characters
+              |> result.map(tp.OChars)
+              |> result.map_error(fn(_e) { "Error reading file" })
           }
         })
       })
