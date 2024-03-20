@@ -42,14 +42,14 @@ pub fn wc(raw_input: List(String)) -> Result(tp.Output, String) {
     tp.Files(first, rest) -> {
       [first, ..rest]
       |> list.try_map(fn(file) {
+        use content <- result.try(
+          file
+          |> read
+          |> result.map_error(fn(_e) { "Error reading file" }),
+        )
+
         command.options
         |> list.try_map(fn(option) {
-          use content <- result.try(
-            file
-            |> read
-            |> result.map_error(fn(_e) { "Error reading file" }),
-          )
-
           Ok(case option {
             tp.Bytes ->
               content
