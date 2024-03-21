@@ -1,21 +1,14 @@
+import file_streams/read_text_stream
 import gleam/list
 import gleam/regex
 import gleam/result
 import gleam/string
 import internal/input_parser
 import internal/types as tp
-import simplifile.{read}
 
 fn read_bytes(content: String) {
   content
   |> string.byte_size
-}
-
-fn read_lines(content: String) {
-  let assert Ok(re) = regex.from_string("\\n")
-  content
-  |> regex.scan(with: re)
-  |> list.length
 }
 
 fn read_words(content: String) {
@@ -32,6 +25,26 @@ fn count_characters(content: String) {
   |> list.length
 }
 
+fn get_file_stats(
+  from read_stream,
+  zero_bytes bytes: Int,
+  zero_lines lines: Int,
+  zero_words words: Int,
+  zero_chars chars: Int,
+) -> Result(#(Int, Int, Int, Int), String) {
+  case read_text_stream.read_line(read_stream) {
+    Error(_) -> Ok(#(bytes, lines, words, chars))
+    Ok(content) -> {
+      let bytes = bytes + read_bytes(content)
+      let lines = lines + 1
+      let words = words + read_words(content)
+      let chars = chars + count_characters(content)
+
+      get_file_stats(read_stream, bytes, lines, words, chars)
+    }
+  }
+}
+
 pub fn wc(raw_input: List(String)) -> Result(tp.Output, String) {
   use command <- result.try(
     raw_input
@@ -43,32 +56,30 @@ pub fn wc(raw_input: List(String)) -> Result(tp.Output, String) {
     tp.Files(first, rest) -> {
       [first, ..rest]
       |> list.try_map(fn(file) {
-        use content <- result.try(
+        use stream <- result.try(
           file
-          |> read
-          |> result.map_error(fn(_e) { "Error reading file" }),
+          |> read_text_stream.open
+          |> result.map_error(fn(_) { "Failed to open stream " }),
         )
 
+        use #(bytes, lines, words, chars) <- result.try(get_file_stats(
+          from: stream,
+          zero_bytes: 0,
+          zero_lines: 0,
+          zero_words: 0,
+          zero_chars: 0,
+        ))
+
+        read_text_stream.close(stream)
+
         command.options
-        |> list.try_map(fn(option) {
-          Ok(case option {
-            tp.Bytes ->
-              content
-              |> read_bytes
-              |> tp.OBytes
-            tp.Lines ->
-              content
-              |> read_lines
-              |> tp.OLines
-            tp.Words ->
-              content
-              |> read_words
-              |> tp.OWords
-            tp.Chars ->
-              content
-              |> count_characters
-              |> tp.OChars
-          })
+        |> list.try_map(fn(opt) {
+          case opt {
+            tp.Bytes -> Ok(tp.OBytes(bytes))
+            tp.Lines -> Ok(tp.OLines(lines))
+            tp.Words -> Ok(tp.OWords(words))
+            tp.Chars -> Ok(tp.OChars(chars))
+          }
         })
       })
       |> result.map(list.flatten)
