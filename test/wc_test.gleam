@@ -38,8 +38,3 @@ pub fn get_default_output_test() {
     Ok(Output(values: [OLines(7146), OWords(58_164), OBytes(342_190)])),
   )
 }
-
-pub fn get_default_output_from_stdin_test() {
-  1
-  |> should.equal(1)
-}
