@@ -1,11 +1,16 @@
+import argv
+import gleam/io
 import gleam/result
 import gleam/list
 import gleam/string
 import gleam/regex
+import simplifile.{read}
 import gleam/int.{subtract}
 import internal/input_parser
 import internal/types as tp
-import simplifile.{read}
+
+@external(erlang, "wc_erl", "io_get_line")
+fn io_get_stdin_line() -> tp.StdinResult(String)
 
 fn read_bytes(content: String) {
   content
@@ -34,6 +39,28 @@ fn count_characters(content: String) {
   |> list.length
 }
 
+fn get_stdin_stats(
+  zero_bytes bytes: Int,
+  zero_lines lines: Int,
+  zero_words words: Int,
+  zero_chars chars: Int,
+) -> Result(#(Int, Int, Int, Int), String) {
+  case io_get_stdin_line() {
+    tp.Eof -> Ok(#(bytes, lines, words, chars))
+    tp.Error -> Error("Error reading stdin")
+    tp.Ok(content) -> {
+      io.print(content)
+
+      let bytes = bytes + read_bytes(content)
+      let lines = lines + 1
+      let words = words + read_words(content)
+      let chars = chars + count_characters(content)
+
+      get_stdin_stats(bytes, lines, words, chars)
+    }
+  }
+}
+
 pub fn wc(raw_input: List(String)) -> Result(tp.Output, String) {
   use command <- result.try(
     raw_input
@@ -41,7 +68,33 @@ pub fn wc(raw_input: List(String)) -> Result(tp.Output, String) {
   )
 
   case command.input {
-    tp.Stdin -> Ok(tp.Output(values: [tp.OBytes(1)]))
+    tp.Stdin -> {
+      use #(bytes, lines, words, chars) <- result.try(get_stdin_stats(
+        zero_bytes: 0,
+        zero_lines: 0,
+        zero_words: 0,
+        zero_chars: 0,
+      ))
+
+      command.options
+      |> list.try_map(fn(option) {
+        Ok(case option {
+          tp.Bytes ->
+            bytes
+            |> tp.OBytes
+          tp.Lines ->
+            lines
+            |> tp.OLines
+          tp.Words ->
+            words
+            |> tp.OWords
+          tp.Chars ->
+            chars
+            |> tp.OChars
+        })
+      })
+      |> result.map(fn(values) { tp.Output(values: values) })
+    }
     tp.Files(first, rest) -> {
       [first, ..rest]
       |> list.try_map(fn(file) {
@@ -77,4 +130,10 @@ pub fn wc(raw_input: List(String)) -> Result(tp.Output, String) {
       |> result.map(fn(values) { tp.Output(values: values) })
     }
   }
+}
+
+pub fn main() {
+  argv.load().arguments
+  |> wc
+  |> io.debug
 }
