@@ -1,6 +1,5 @@
 import argv
 import gleam/io
-import gleam/bit_array
 import gleam/result
 import gleam/list
 import gleam/string
@@ -11,7 +10,7 @@ import internal/input_parser
 import internal/types as tp
 
 @external(erlang, "wc_erl", "io_get_line")
-fn io_get_stdin_line() -> tp.StdinResult(BitArray)
+fn io_get_stdin_line() -> tp.StdinResult(String)
 
 fn read_bytes(content: String) {
   content
@@ -49,13 +48,7 @@ fn get_stdin_stats(
   case io_get_stdin_line() {
     tp.Eof -> Ok(#(bytes, lines, words, chars))
     tp.Error -> Error("Error reading stdin")
-    tp.Ok(bits) -> {
-      use content <- result.try(
-        bits
-        |> bit_array.to_string
-        |> result.map_error(fn(_) { "Error converting bit_array to String" }),
-      )
-
+    tp.Ok(content) -> {
       io.print(content)
 
       let bytes = bytes + read_bytes(content)
