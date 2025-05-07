@@ -14,7 +14,7 @@ version = "1.0.0"
 
 [dependencies]
 gleam_stdlib = "~> 0.34 or ~> 1.0"
-simplifile = "~> 1.5"
+file_streams = "~> 0.3"
 
 [dev-dependencies]
 gleeunit = "~> 1.0"
