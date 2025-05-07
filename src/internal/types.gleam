@@ -25,3 +25,9 @@ pub type OutputValue {
 pub type Output {
   Output(values: List(OutputValue))
 }
+
+pub type StdinResult(a) {
+  Ok(a)
+  Eof
+  Error
+}
