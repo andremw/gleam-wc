@@ -6,5 +6,8 @@ io_get_line() ->
     case io:get_line("") of
         eof -> eof;
         {error} -> {error};
-        Data -> {ok, Data}
+        Data ->
+            Utf8Data = unicode:characters_to_binary(Data),
+            io:format("Data: ~p~n", [Utf8Data]),
+            {ok, Utf8Data}
     end.
