@@ -1,8 +1,7 @@
-import gleam/result
 import gleam/list
-import gleam/string
 import gleam/regex
-import gleam/int.{subtract}
+import gleam/result
+import gleam/string
 import internal/input_parser
 import internal/types as tp
 import simplifile.{read}
@@ -13,11 +12,10 @@ fn read_bytes(content: String) {
 }
 
 fn read_lines(content: String) {
-  let assert Ok(re) = regex.from_string("\\r\\n|\\r|\\n")
+  let assert Ok(re) = regex.from_string("\\n")
   content
-  |> regex.split(with: re)
+  |> regex.scan(with: re)
   |> list.length
-  |> subtract(1)
 }
 
 fn read_words(content: String) {
