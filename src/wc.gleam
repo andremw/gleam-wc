@@ -14,8 +14,8 @@ fn read_bytes(content: String) {
 fn read_words(content: String) {
   let assert Ok(re) = regex.from_string("\\s+")
   content
-  |> string.trim
   |> regex.split(with: re)
+  |> list.filter(fn(word) { word != "" })
   |> list.length
 }
 
@@ -35,10 +35,12 @@ fn get_file_stats(
   case read_text_stream.read_line(read_stream) {
     Error(_) -> Ok(#(bytes, lines, words, chars))
     Ok(content) -> {
-      let bytes = bytes + read_bytes(content)
+      // adding 1 to account for the newline character
+      let bytes = bytes + read_bytes(content) + 1
       let lines = lines + 1
       let words = words + read_words(content)
-      let chars = chars + count_characters(content)
+      // adding 1 to account for the newline character
+      let chars = chars + count_characters(content) + 1
 
       get_file_stats(read_stream, bytes, lines, words, chars)
     }
